@@ -6,10 +6,12 @@ import 'dart:convert';
 
 class ShowTable extends StatelessWidget {
   ShowTable({super.key});
+
   static List<int> list = List.empty(growable: true);
+
   Future<List<Show>> fetchShows() async {
     final response =
-    await http.get(Uri.parse('http://localhost:8080/ticket-master/show'));
+        await http.get(Uri.parse('http://localhost:8080/ticket-master/show'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
@@ -21,9 +23,11 @@ class ShowTable extends StatelessWidget {
       return List.empty();
     }
   }
-  static List<int> getIdsOfShows(){
+
+  static List<int> getIdsOfShows() {
     return list;
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Show>>(
@@ -39,16 +43,19 @@ class ShowTable extends StatelessWidget {
               DataColumn(label: Text('Available Seats')),
               DataColumn(label: Text('Sold Seats')),
             ],
-            rows: snapshot.data!.map((Show show) => DataRow(
-              cells: <DataCell>[
-                DataCell(Text('${show.id}')),
-                DataCell(Text(show.artist!.name)), // Assuming Artist has a name property
-                DataCell(Text(show.location)),
-                DataCell(Text('${show.showDate}')),
-                DataCell(Text('${show.availableSeats}')),
-                DataCell(Text('${show.soldSeats}')),
-              ],
-            )).toList(),
+            rows: snapshot.data!
+                .map((Show show) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('${show.id}')),
+                        DataCell(Text(show.artist!.name)),
+                        // Assuming Artist has a name property
+                        DataCell(Text(show.location)),
+                        DataCell(Text('${show.showDate}')),
+                        DataCell(Text('${show.availableSeats}')),
+                        DataCell(Text('${show.soldSeats}')),
+                      ],
+                    ))
+                .toList(),
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
